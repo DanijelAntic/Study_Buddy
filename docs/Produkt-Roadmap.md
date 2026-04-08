@@ -52,7 +52,7 @@
 
 - Inhalt: Die Tabellenansicht (MO–SO).
 
-- Features: Eingabemöglichkeit für Zeitblöcke. Implementierung eures Farbcodes (L, A, C, F).
+- Features: Eingabemöglichkeit für Zeitblöcke. Implementierung eigener Aktivitäten.
 
 
 ## Version 6.0: Der Prüfungsplan
