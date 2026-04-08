@@ -47,8 +47,7 @@ Beobachtungen:
 - wenige Schritte notwendig  
 - übersichtliche Darstellung  
  
-### Was war schlecht?
-- Timer-Funktion war nicht intuitiv  
+### Was war schlecht? 
 - einige Beschriftungen könnten klarer sein  
 - wenig visuelle Unterscheidung zwischen Bereichen  
  
@@ -61,4 +60,8 @@ Beobachtungen:
 ### Neue Probleme
 - zu viele Funktionen könnten die App unübersichtlich machen  
 - Timer wird möglicherweise nicht genutzt  
-- Motivation bleibt trotz App ein Problem  
+- Motivation bleibt trotz App ein Problem
+
+---
+
+![Studynova_Raster](../Images/Studynova_Raster.png)
