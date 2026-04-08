@@ -13,6 +13,6 @@ Studynova richtet sich an Schüler, die ihre Aufgaben oft vergessen, sich schwer
 Danijel Antic (anticdan@students.zhaw.ch)
 Harini Murugadas (murughar@students.zhaw.ch)
 Alexandra Vlk (vlkale01@students.zhaw.ch)
-ELiah Diener (dieneeli@students.zhaw.ch)
+Eliah Diener (dieneeli@students.zhaw.ch)
 
 
