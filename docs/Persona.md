@@ -1,6 +1,6 @@
 # Persona – Studynova
 
-## Name
+## Name & Alter
 
 Luca Meier, 16
 
