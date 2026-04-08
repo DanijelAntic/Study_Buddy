@@ -1,4 +1,4 @@
-![Roadmap](..\Images\Roadmap.jpg)
+![Roadmap](../Images/Roadmap.jpg)
 
 # Roadmap Studynova
 
