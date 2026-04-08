@@ -64,4 +64,4 @@ Luca mag Apps, die sofort funktionieren, ohne viel Erklärung. Besonders gut fin
 
 "Ich will einfach schnell sehen, was ich machen muss, und einen einfachen Überblick haben was ich bis wann gemacht haben muss."
 
-![Luca Meier](Images/traveler-man-is-taking-photo-with-mobile-phone-illustration_33070-5986.avif)
+![Luca Meier](https://img.freepik.com/premium-vector/traveler-man-is-taking-photo-with-mobile-phone-illustration_33070-5986.jpg)
