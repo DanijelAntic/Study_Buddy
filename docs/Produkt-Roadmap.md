@@ -2,6 +2,10 @@
 
 # Roadmap Studynova
 
+## Version 1.0: Grundgerüst
+
+- Alle wichtigen Installationen mit Unterseiten auf Python vorbereitet.
+
 ## Version 1.1: Sign-Up / Login
 
 - Inhalt: Ein schlichtes Design mit zwei großen Buttons: SIGN UP und LOG IN.
