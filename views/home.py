@@ -7,6 +7,9 @@ st.title("Meine erste Streamlit App")
 """
 Diese App wurde von folgenden Personen entwickelt:
 - Danijel Antic (anticdan@students.zhaw.ch)
+- Eliah Diener (dieneeli@students.zhaw.ch)
+- Harini Murugadas (murughar@students.zhaw.ch)
+- Alexandra Vlk (vlkale01@students.zhaw.ch)
 
 Diese App ist das leere Gerüst für die App-Entwicklung im Modul Informatik 2 (BMLD/ZHAW)
 
