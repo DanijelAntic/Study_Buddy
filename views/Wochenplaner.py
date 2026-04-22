@@ -6,7 +6,7 @@ def main():
 
     # Definierte Wochentage und Zeiten
     tage = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"]
-    zeiten = [f"{i}-{i+1}" for i in range(6, 22)]  # 6-7, 7-8, ..., 21-22
+    zeiten = [f"{i}-{i+1}" for i in range(6, 22)]  # 6-7, 7-8, ..., 21-22 (behält 21-22)
 
     # Optionen für die Drop-Down-Auswahl (kannst du erweitern)
     optionen = ["Leer", "Lernen", "Sport", "Essen", "Arbeit", "Freizeit", "Schlafen"]
@@ -15,8 +15,8 @@ def main():
     if 'wochenplan' not in st.session_state:
         st.session_state['wochenplan'] = {tag: {zeit: "Leer" for zeit in zeiten} for tag in tage}
 
-    # Erstelle die Tabelle mit Spalten für die Tage
-    cols = st.columns(len(tage) + 1)  # +1 für die Zeit-Spalte links
+    # Erstelle die Tabelle mit Spalten für die Tage (Zeit-Spalte breiter für bessere Ausrichtung)
+    cols = st.columns([2] + [1]*7)  # Zeit-Spalte doppelt so breit
 
     # Header: Leere Zelle links oben, dann die Tage
     with cols[0]:
@@ -46,10 +46,6 @@ def main():
                 )
                 # Speichere die Änderung in session_state
                 st.session_state['wochenplan'][tag][zeit] = neuer_wert
-
-    # Optional: Zeige den aktuellen Plan als JSON an (für Debugging)
-    st.write("### Aktueller Wochenplan (Vorschau)")
-    st.json(st.session_state['wochenplan'])
 
 # Diese Funktion wird von Streamlit als Seite aufgerufen
 if __name__ == "__main__":
