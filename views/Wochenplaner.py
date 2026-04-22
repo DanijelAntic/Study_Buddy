@@ -5,7 +5,7 @@ def main():
     st.write("Plane deinen Wochenablauf mit diesem interaktiven Kalender.")
 
     # Definierte Wochentage und Zeiten
-    tage = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"]
+    tage = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]  # Abgekürzte Wochentage
     zeiten = [f"{i}-{i+1}" for i in range(6, 22)]  # 6-7, 7-8, ..., 21-22 (behält 21-22)
 
     # Optionen für die Drop-Down-Auswahl (kannst du erweitern)
