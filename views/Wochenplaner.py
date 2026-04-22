@@ -15,8 +15,8 @@ def main():
     if 'wochenplan' not in st.session_state:
         st.session_state['wochenplan'] = {tag: {zeit: "Leer" for zeit in zeiten} for tag in tage}
 
-    # Erstelle die Tabelle mit Spalten für die Tage (Zeit-Spalte breiter für bessere Ausrichtung)
-    cols = st.columns([2] + [1]*7)  # Zeit-Spalte doppelt so breit
+    # Erstelle die Tabelle mit Spalten für die Tage (alle gleich breit für gleichmäßiges Layout)
+    cols = st.columns(8)  # Alle 8 Spalten gleich breit
 
     # Header: Leere Zelle links oben, dann die Tage
     with cols[0]:
