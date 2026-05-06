@@ -16,7 +16,10 @@ ausgewaehltes_datum = st.date_input(
     value=heute
 )
 
-wochen_start = ausgewaehltes_datum - timedelta(days=ausgewaehltes_datum.weekday())
+wochen_start = ausgewaehltes_datum - timedelta(
+    days=ausgewaehltes_datum.weekday()
+)
+
 wochen_ende = wochen_start + timedelta(days=6)
 
 st.info(
@@ -28,7 +31,7 @@ st.info(
 tage = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
 
 zeiten = [
-    f"{i:02d}:00-{(i + 1) % 24:02d}:00"
+    f"{i:02d}:00-{(i+1)%24:02d}:00"
     for i in range(6, 24)
 ]
 
@@ -67,7 +70,9 @@ st.subheader("Legende")
 leg_cols = st.columns(4)
 
 for i, name in enumerate(optionen):
+
     with leg_cols[i % 4]:
+
         st.markdown(
             f"""
             <div style="
@@ -84,31 +89,60 @@ for i, name in enumerate(optionen):
             unsafe_allow_html=True
         )
 
-st.caption("Leer = Erholung, Essen, Duschen, freie Zeit oder nichts geplant")
+st.caption(
+    "Leer = Erholung, Essen, Duschen, freie Zeit oder nichts geplant"
+)
 
 # -------------------- Tabelle --------------------
 st.divider()
+
 st.subheader("Wochenübersicht")
 
-header_cols = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
+header_cols = st.columns([1,1,1,1,1,1,1,1])
 
 with header_cols[0]:
     st.markdown("**Zeit**")
 
 for i, tag in enumerate(tage):
+
     with header_cols[i + 1]:
         st.markdown(f"**{tag}**")
 
+# -------------------- Tabelleninhalt --------------------
 for zeit in zeiten:
-    row_cols = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
+
+    row_cols = st.columns([1,1,1,1,1,1,1,1])
 
     with row_cols[0]:
         st.markdown(f"**{zeit}**")
 
     for i, tag in enumerate(tage):
+
         with row_cols[i + 1]:
+
             aktueller_wert = st.session_state["wochenplan"][tag][zeit]
 
+            farbe = farben[aktueller_wert]
+
+            # Farbiges Kästchen
+            st.markdown(
+                f"""
+                <div style="
+                    background-color: {farbe};
+                    padding: 10px;
+                    border-radius: 10px;
+                    text-align: center;
+                    font-weight: bold;
+                    margin-bottom: 4px;
+                    min-height: 38px;
+                ">
+                    {aktueller_wert}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+            # Auswahlfeld
             auswahl = st.selectbox(
                 label=f"{tag} {zeit}",
                 options=optionen,
@@ -125,43 +159,69 @@ st.divider()
 col1, col2 = st.columns(2)
 
 with col1:
+
     if st.button("Plan speichern"):
         st.success("Wochenplan wurde gespeichert.")
 
 with col2:
+
     if st.button("Clear"):
+
         st.session_state["wochenplan"] = {
             tag: {zeit: "Leer" for zeit in zeiten}
             for tag in tage
         }
+
         st.rerun()
 
 # -------------------- Grafik --------------------
 st.divider()
+
 st.subheader("Grafische Wochenübersicht")
 
 aktivitaeten = []
 
 for tag in tage:
     for zeit in zeiten:
-        aktivitaeten.append(st.session_state["wochenplan"][tag][zeit])
 
-grafik_df = pd.DataFrame({"Aktivität": aktivitaeten})
+        aktivitaeten.append(
+            st.session_state["wochenplan"][tag][zeit]
+        )
+
+grafik_df = pd.DataFrame({
+    "Aktivität": aktivitaeten
+})
 
 stunden_df = grafik_df["Aktivität"].value_counts().reset_index()
-stunden_df.columns = ["Aktivität", "Stunden"]
+
+stunden_df.columns = [
+    "Aktivität",
+    "Stunden"
+]
 
 chart = alt.Chart(stunden_df).mark_bar().encode(
-    x=alt.X("Aktivität:N", title="Aktivität"),
-    y=alt.Y("Stunden:Q", title="Anzahl Stunden pro Woche"),
+
+    x=alt.X(
+        "Aktivität:N",
+        title="Aktivität"
+    ),
+
+    y=alt.Y(
+        "Stunden:Q",
+        title="Anzahl Stunden pro Woche"
+    ),
+
     color=alt.Color(
         "Aktivität:N",
+
         scale=alt.Scale(
             domain=list(farben.keys()),
             range=list(farben.values())
         ),
+
         legend=None
     ),
+
     tooltip=[
         alt.Tooltip("Aktivität:N"),
         alt.Tooltip("Stunden:Q")
