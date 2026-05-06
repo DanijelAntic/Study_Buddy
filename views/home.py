@@ -1,6 +1,7 @@
 import streamlit as st
 
-st.title("Meine erste Streamlit App")
+st.title("StudyBuddy - Dein persönlicher Lernplaner")
+st.toast("🌿 Denk daran auch kleine Fortschritte zählen.")
 
 # !! WICHTIG: Eure Emails müssen in der App erscheinen!!
 
