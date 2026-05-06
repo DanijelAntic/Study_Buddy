@@ -10,21 +10,14 @@ if "noten_df" not in st.session_state:
         columns=["Fach", "Noten", "Durchschnitt"]
     )
 
-if "fach_input" not in st.session_state:
-    st.session_state["fach_input"] = ""
-
-if "note_input" not in st.session_state:
-    st.session_state["note_input"] = 4.0
-
 
 # -------------------- Formular --------------------
 st.subheader("Neue Note eintragen")
 
-with st.form("noten_form"):
+with st.form("noten_form", clear_on_submit=True):
 
     fach = st.text_input(
         "Fach",
-        key="fach_input",
         placeholder="z.B. Mathe"
     )
 
@@ -33,7 +26,7 @@ with st.form("noten_form"):
         min_value=1.0,
         max_value=6.0,
         step=0.1,
-        key="note_input"
+        value=4.0
     )
 
     col1, col2 = st.columns(2)
@@ -71,6 +64,7 @@ if speichern:
             noten_liste = [
                 float(n.strip())
                 for n in neue_noten.split(",")
+                if n.strip() != ""
             ]
 
             durchschnitt = round(
@@ -93,23 +87,13 @@ if speichern:
 
         st.success("Note gespeichert.")
 
-        # Eingaben zurücksetzen
-        st.session_state["fach_input"] = ""
-        st.session_state["note_input"] = 4.0
-
-        st.rerun()
-
-
 # -------------------- Clear --------------------
 if clear:
 
     st.session_state["noten_df"] = pd.DataFrame(
         columns=["Fach", "Noten", "Durchschnitt"]
     )
-
-    st.session_state["fach_input"] = ""
-    st.session_state["note_input"] = 4.0
-
+    
     st.rerun()
 
 
