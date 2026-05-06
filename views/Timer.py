@@ -4,6 +4,17 @@ import time
 st.title("Timer")
 st.subheader("Fokus Modus")
 
+# -------------------- CSS für Buttons --------------------
+st.markdown("""
+<style>
+.stButton > button {
+    border-radius: 10px;
+    height: 3em;
+    font-weight: bold;
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 # -------------------- Session State --------------------
 if "timer_running" not in st.session_state:
@@ -24,7 +35,6 @@ minuten = st.number_input(
     value=25
 )
 
-# Zeit nur neu setzen, wenn Timer nicht läuft und nicht pausiert ist
 if not st.session_state["timer_running"] and not st.session_state["timer_paused"]:
     st.session_state["remaining_time"] = minuten * 60
 
@@ -49,6 +59,34 @@ st.markdown(
 )
 
 
+# -------------------- Button Farben --------------------
+st.markdown("""
+<style>
+button[kind="secondary"] {
+    font-weight: bold;
+}
+
+/* Start */
+div[data-testid="column"]:nth-of-type(1) button {
+    background-color: #BBD7FF;
+    color: black;
+}
+
+/* Pause */
+div[data-testid="column"]:nth-of-type(2) button {
+    background-color: #FFD6A5;
+    color: black;
+}
+
+/* Reset */
+div[data-testid="column"]:nth-of-type(3) button {
+    background-color: #FFB3B3;
+    color: black;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
 # -------------------- Buttons --------------------
 col1, col2, col3 = st.columns(3)
 
@@ -70,8 +108,17 @@ with col3:
         st.rerun()
 
 
-# Weiter-Button erscheint nur nach Pause
+# -------------------- Weiter Button --------------------
 if st.session_state["timer_paused"]:
+    st.markdown("""
+    <style>
+    div.stButton > button {
+        background-color: #C8F7C5;
+        color: black;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
     if st.button("Weiter"):
         st.session_state["timer_running"] = True
         st.session_state["timer_paused"] = False
