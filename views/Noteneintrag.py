@@ -3,20 +3,24 @@ import pandas as pd
 
 st.title("Noteneintrag Rechner")
 
-if "grades_df" not in st.session_state:
-    st.session_state["grades_df"] = pd.DataFrame(
+if "noten_df" not in st.session_state:
+    st.session_state["noten_df"] = pd.DataFrame(
         columns=["Fach", "Noten", "Durchschnitt"]
     )
 
-with st.form("noten_form"):
-    fach = st.text_input("Fach eintragen", placeholder="z.B. Mathe, Chemie, Bio")
+st.subheader("Neue Note eintragen")
 
-    noten_text = st.text_input(
-        "Noten eintragen",
-        placeholder="z.B. 5, 4.5, 6"
+with st.form("noten_form"):
+    fach = st.text_input("Fach", placeholder="z.B. Mathe")
+    note = st.number_input(
+        "Note",
+        min_value=1.0,
+        max_value=6.0,
+        step=0.1,
+        value=4.0
     )
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
 
     with col1:
         speichern = st.form_submit_button("Speichern")
@@ -24,55 +28,71 @@ with st.form("noten_form"):
     with col2:
         clear = st.form_submit_button("Clear")
 
+    with col3:
+        durchschnitt_button = st.form_submit_button("Durchschnitt berechnen")
+
 
 if speichern:
-    try:
-        noten = [
-            float(note.strip().replace(",", "."))
-            for note in noten_text.split(",")
-            if note.strip() != ""
-        ]
+    if fach.strip() == "":
+        st.warning("Bitte ein Fach eingeben.")
+    else:
+        df = st.session_state["noten_df"].copy()
+        fach_clean = fach.strip()
 
-        if fach.strip() == "":
-            st.warning("Bitte ein Fach eingeben.")
+        if fach_clean in df["Fach"].values:
+            index = df.index[df["Fach"] == fach_clean][0]
 
-        elif len(noten) == 0:
-            st.warning("Bitte mindestens eine Note eingeben.")
+            alte_noten = df.at[index, "Noten"]
+            neue_noten = f"{alte_noten}, {note}"
 
-        elif any(note < 1 or note > 6 for note in noten):
-            st.warning("Noten müssen zwischen 1 und 6 liegen.")
+            df.at[index, "Noten"] = neue_noten
 
-        else:
-            durchschnitt = round(sum(noten) / len(noten), 2)
-
-            neue_zeile = pd.DataFrame([{
-                "Fach": fach,
-                "Noten": ", ".join(str(note) for note in noten),
-                "Durchschnitt": durchschnitt
-            }])
-
-            st.session_state["grades_df"] = pd.concat(
-                [st.session_state["grades_df"], neue_zeile],
-                ignore_index=True
+            noten_liste = [
+                float(n.strip()) for n in neue_noten.split(",")
+            ]
+            df.at[index, "Durchschnitt"] = round(
+                sum(noten_liste) / len(noten_liste), 2
             )
 
-            st.success(f"{fach} gespeichert. Durchschnitt: {durchschnitt}")
+        else:
+            df.loc[len(df)] = {
+                "Fach": fach_clean,
+                "Noten": str(note),
+                "Durchschnitt": round(note, 2)
+            }
 
-    except ValueError:
-        st.error("Bitte Noten korrekt eingeben, z.B. 5, 4.5, 6")
+        st.session_state["noten_df"] = df
+        st.success("Note gespeichert.")
+
+
+if durchschnitt_button:
+    df = st.session_state["noten_df"].copy()
+
+    for index, row in df.iterrows():
+        noten_liste = [
+            float(n.strip()) for n in str(row["Noten"]).split(",")
+            if n.strip() != ""
+        ]
+
+        if len(noten_liste) > 0:
+            df.at[index, "Durchschnitt"] = round(
+                sum(noten_liste) / len(noten_liste), 2
+            )
+
+    st.session_state["noten_df"] = df
+    st.success("Durchschnitt berechnet.")
 
 
 if clear:
-    st.session_state["grades_df"] = pd.DataFrame(
+    st.session_state["noten_df"] = pd.DataFrame(
         columns=["Fach", "Noten", "Durchschnitt"]
     )
     st.rerun()
 
 
-st.subheader("Gespeicherte Noten")
+st.subheader("Notentabelle")
 
-if not st.session_state["grades_df"].empty:
-    st.dataframe(st.session_state["grades_df"], use_container_width=True)
+if not st.session_state["noten_df"].empty:
+    st.dataframe(st.session_state["noten_df"], use_container_width=True)
 else:
-    st.info("Noch keine Noten gespeichert.")
-    
+    st.info("Noch keine Noten eingetragen.")
