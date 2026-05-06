@@ -1,11 +1,15 @@
 import streamlit as st
+from datetime import date, datetime
 
 st.title("To-Do Liste")
 
+# -------------------- Session State --------------------
 if "todos" not in st.session_state:
     st.session_state["todos"] = []
 
-with st.form("todo_form"):
+
+# -------------------- Formular --------------------
+with st.form("todo_form", clear_on_submit=True):
     aufgabe = st.text_input("Aufgabe")
     beschreibung = st.text_input("Kurze Beschreibung")
     deadline = st.date_input("Deadline")
@@ -24,6 +28,8 @@ with st.form("todo_form"):
             })
             st.success("Aufgabe gespeichert.")
 
+
+# -------------------- Aufgaben anzeigen --------------------
 if st.session_state["todos"]:
     st.subheader("Meine Aufgaben")
 
@@ -45,14 +51,38 @@ if st.session_state["todos"]:
             value=todo["Erledigt"],
             key=f"todo_done_{i}"
         )
+
         st.session_state["todos"][i]["Erledigt"] = erledigt
+
 else:
     st.info("Noch keine Aufgaben vorhanden.")
 
-col_clear, col_space = st.columns([1, 3])
 
-with col_clear:
-    if st.button("Clear"):
-        st.session_state["todos"] = []
-        st.rerun()
-        
+# -------------------- Clear Button --------------------
+if st.button("Clear"):
+    st.session_state["todos"] = []
+    st.rerun()
+
+
+# -------------------- Erinnerungen --------------------
+if st.session_state["todos"]:
+    st.subheader("Erinnerungen")
+
+    heute = date.today()
+
+    for todo in st.session_state["todos"]:
+        deadline_date = datetime.strptime(todo["Deadline"], "%d.%m.%Y").date()
+        tage = (deadline_date - heute).days
+
+        if todo["Erledigt"]:
+            continue
+
+        if tage < 0:
+            st.error(f"Die Aufgabe '{todo['Aufgabe']}' ist überfällig!")
+        elif tage == 0:
+            st.warning(f"Heute fällig: {todo['Aufgabe']}")
+            st.toast(f"Heute fällig: {todo['Aufgabe']}", icon="⚠️")
+        elif tage == 1:
+            st.info(f"Morgen fällig: {todo['Aufgabe']}")
+        elif tage <= 3:
+            st.info(f"{todo['Aufgabe']} ist in {tage} Tagen fällig.")
