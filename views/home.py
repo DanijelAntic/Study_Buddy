@@ -1,33 +1,55 @@
 import streamlit as st
 from pathlib import Path
 
-logo_path = Path(__file__).parent.parent / "Images" / "Study_Buddy_Logo.jpg"
+# -------------------- Logo Pfad --------------------
+logo_path = (
+    Path(__file__).parent.parent
+    / "Images"
+    / "Study_Buddy_Logo.jpg"
+)
 
+# -------------------- Titel --------------------
 st.markdown(
     """
-    <div style="text-align: center; margin-top: 20px;">
-        <h1 style="font-size: 70px; margin-bottom: 0px; font-weight: 800;">
+    <div style="text-align:center; margin-top:20px;">
+
+        <h1 style="
+            font-size:70px;
+            margin-bottom:0px;
+            font-weight:800;
+        ">
             Study<span style="color:#70cfc3;">Buddy</span>
         </h1>
-        <h3 style="margin-top: 10px; font-weight: 400; font-size: 32px;">
+
+        <h3 style="
+            margin-top:10px;
+            font-size:32px;
+            font-weight:400;
+        ">
             Dein persönlicher Lernplaner
         </h3>
+
     </div>
     """,
     unsafe_allow_html=True
 )
 
+# -------------------- Abstand --------------------
 st.markdown("<br>", unsafe_allow_html=True)
 
-if logo_path.exists():
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.image(str(logo_path), use_container_width=True)
-else:
-    st.error(f"Logo wurde nicht gefunden: {logo_path}")
+# -------------------- Logo anzeigen --------------------
+col1, col2, col3 = st.columns([1, 2, 1])
 
+with col2:
+    st.image(
+        str(logo_path),
+        use_container_width=True
+    )
+
+# -------------------- Abstand --------------------
 st.markdown("<br>", unsafe_allow_html=True)
 
+# -------------------- Projektbeschreibung --------------------
 st.write(
     "StudyBuddy wurde entwickelt, um Schülerinnen und Schüler "
     "bei der Organisation ihres Lernalltags zu unterstützen. "
@@ -37,8 +59,10 @@ st.write(
     "übersichtlicher und stressfreier zu gestalten."
 )
 
+# -------------------- Abstand --------------------
 st.markdown("<br>", unsafe_allow_html=True)
 
+# -------------------- Entwicklerteam --------------------
 st.subheader("Entwicklerteam")
 
 st.markdown(
@@ -56,4 +80,5 @@ st.markdown(
   vlkale01@students.zhaw.ch
 """
 )
+
 
