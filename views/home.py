@@ -5,7 +5,7 @@ from pathlib import Path
 logo_path = (
     Path(__file__).parent.parent
     / "Images"
-    / "Study_Buddy_Logo.jpg"
+    / "studybuddy_logo.png"
 )
 
 # -------------------- Titel --------------------
@@ -80,5 +80,7 @@ st.markdown(
   vlkale01@students.zhaw.ch
 """
 )
+
+
 
 
