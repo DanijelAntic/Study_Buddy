@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 st.title("Noteneintrag Rechner")
-
+st.write("Trage deine Noten ein und berechne deine Durchschnittswerte schnell und übersichtlich.")
 
 # -------------------- Session State --------------------
 if "noten_df" not in st.session_state:

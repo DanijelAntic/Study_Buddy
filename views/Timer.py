@@ -1,7 +1,8 @@
 import streamlit as st
 import time
 
-st.title("Fokus Modus")
+st.title("Fokus Timer")
+st.write("Nutze den Fokus-Timer, um konzentriert zu lernen und produktive Lernphasen zu planen.")
 
 # -------------------- CSS --------------------
 st.markdown("""

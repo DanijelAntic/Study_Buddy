@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import date, datetime
 
 st.title("To-Do Liste")
+st.write("Organisiere deine Aufgaben und behalte wichtige To-Dos und Deadlines im Überblick.")
 
 # -------------------- Session State --------------------
 if "todos" not in st.session_state:

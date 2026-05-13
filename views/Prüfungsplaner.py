@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import date
 
 st.title("Prüfungsplaner")
+st.write("Plane deine Prüfungen übersichtlich und behalte wichtige Termine und Vorbereitungen im Blick.")
 
 if "exams_df" not in st.session_state:
     st.session_state["exams_df"] = pd.DataFrame(
