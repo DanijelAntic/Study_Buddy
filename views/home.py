@@ -1,7 +1,7 @@
 import streamlit as st
 from pathlib import Path
 
-logo_path = Path(__file__).parent.parent / "Images" / "StudyBuddy_Logo.jpg"
+logo_path = Path(__file__).parent.parent / "Images" / "Study_Buddy_Logo.jpg"
 
 st.markdown(
     """
