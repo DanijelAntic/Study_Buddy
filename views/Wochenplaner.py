@@ -5,7 +5,19 @@ from datetime import date, timedelta
 
 st.set_page_config(layout="wide")
 
-st.title("Wochenplaner")
+# Times New Roman
+st.markdown(
+    """
+    <h1 style="
+        font-size:55px;
+        font-family:'Times New Roman';
+        color:#1D3557;
+    ">
+        Wochenplaner
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
 st.write("Plane deinen Wochenablauf mit diesem interaktiven Kalender.")
 
 # -------------------- Woche auswählen --------------------

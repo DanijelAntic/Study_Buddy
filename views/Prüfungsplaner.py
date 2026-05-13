@@ -2,7 +2,20 @@ import streamlit as st
 import pandas as pd
 from datetime import date
 
-st.title("Prüfungsplaner")
+
+# Times New Roman
+st.markdown(
+    """
+    <h1 style="
+        font-size:55px;
+        font-family:'Times New Roman';
+        color:#1D3557;
+    ">
+        Prüfungsplaner
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
 st.write("Plane deine Prüfungen übersichtlich und behalte wichtige Termine und Vorbereitungen im Blick.")
 
 if "exams_df" not in st.session_state:
@@ -69,4 +82,4 @@ if not st.session_state["exams_df"].empty:
             st.info(f"{row['Fach']} ist in {tage} Tagen.")
 else:
     st.info("Noch keine Prüfungen gespeichert.")
-    
+

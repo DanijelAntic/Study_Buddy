@@ -1,7 +1,20 @@
 import streamlit as st
 import pandas as pd
 
-st.title("Noteneintrag Rechner")
+# Times New Roman
+st.markdown(
+    """
+    <h1 style="
+        font-size:55px;
+        font-family:'Times New Roman';
+        color:#1D3557;
+    ">
+        Noteneintrag
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
+
 st.write("Trage deine Noten ein und berechne deine Durchschnittswerte schnell und übersichtlich.")
 
 # -------------------- Session State --------------------
@@ -109,3 +122,4 @@ if not st.session_state["noten_df"].empty:
 
 else:
     st.info("Noch keine Noten eingetragen.")
+

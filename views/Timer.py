@@ -1,7 +1,20 @@
 import streamlit as st
 import time
 
-st.title("Fokus Timer")
+
+# Times New Roman
+st.markdown(
+    """
+    <h1 style="
+        font-size:55px;
+        font-family:'Times New Roman';
+        color:#1D3557;
+    ">
+        Fokus-Timer
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
 st.write("Nutze den Fokus-Timer, um konzentriert zu lernen und produktive Lernphasen zu planen.")
 
 # -------------------- CSS --------------------

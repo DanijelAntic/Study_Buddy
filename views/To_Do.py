@@ -1,7 +1,20 @@
 import streamlit as st
 from datetime import date, datetime
 
-st.title("To-Do Liste")
+
+# Times New Roman
+st.markdown(
+    """
+    <h1 style="
+        font-size:55px;
+        font-family:'Times New Roman';
+        color:#1D3557;
+    ">
+        To-Do-Liste
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
 st.write("Organisiere deine Aufgaben und behalte wichtige To-Dos und Deadlines im Überblick.")
 
 # -------------------- Session State --------------------
@@ -87,3 +100,4 @@ if st.session_state["todos"]:
             st.info(f"Morgen fällig: {todo['Aufgabe']}")
         elif tage <= 3:
             st.info(f"{todo['Aufgabe']} ist in {tage} Tagen fällig.")
+
