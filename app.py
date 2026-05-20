@@ -41,7 +41,7 @@ pg_to_do = st.Page(
 )
 
 pg_wochenplaner = st.Page(
-    "views/wochenplaner.py",
+    "views/Wochenplaner.py",
     title="Wochenplaner"
 )
 
@@ -51,12 +51,12 @@ pg_pruefungsplaner = st.Page(
 )
 
 pg_noteneintrag = st.Page(
-    "views/noteneintrag.py",
+    "views/Noteneintrag.py",
     title="Noteneintrag"
 )
 
 pg_timer = st.Page(
-    "views/timer.py",
+    "views/Timer.py",
     title="Timer"
 )
 
