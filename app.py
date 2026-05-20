@@ -1,6 +1,7 @@
 import streamlit as st
 from utils.data_manager import DataManager
 
+# -------------------- Seitenlayout --------------------
 st.set_page_config(
     page_title="StudyBuddy",
     page_icon=":material/home:",
@@ -10,13 +11,19 @@ st.set_page_config(
 # -------------------- Benutzername --------------------
 st.session_state["username"] = "studybuddy"
 
-# -------------------- DataManager mit SWITCHdrive --------------------
+# -------------------- Alten DataManager löschen --------------------
 if "data_manager" in st.session_state:
     del st.session_state["data_manager"]
 
+# -------------------- SWITCHdrive Verbindung --------------------
 DataManager(
     fs_protocol="webdav",
-    fs_root_folder="app_data"
+    fs_root_folder="StudyBuddy"
+)
+
+# -------------------- INFO TEST --------------------
+st.write(
+    st.session_state["data_manager"].info()
 )
 
 # -------------------- Seiten --------------------
@@ -69,4 +76,3 @@ pg = st.navigation([
     pg_timer
 ])
 
-pg.run()
