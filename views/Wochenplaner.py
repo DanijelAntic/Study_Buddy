@@ -3,22 +3,118 @@ import pandas as pd
 import altair as alt
 from datetime import date, timedelta
 
-st.set_page_config(layout="wide")
+from utils.style import page_title
+from utils.data_manager import DataManager
 
-# Times New Roman
-st.markdown(
-    """
-    <h1 style="
-        font-size:55px;
-        font-family:'Times New Roman';
-        color:#1D3557;
-    ">
-        Wochenplaner
-    </h1>
-    """,
-    unsafe_allow_html=True
-)
+
+# -------------------- Titel --------------------
+page_title("Wochenplaner")
+
 st.write("Plane deinen Wochenablauf mit diesem interaktiven Kalender.")
+
+
+# -------------------- Grunddaten --------------------
+tage = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
+
+zeiten = [
+    f"{i:02d}:00-{(i + 1) % 24:02d}:00"
+    for i in range(6, 24)
+]
+
+optionen = [
+    "Leer",
+    "Schule",
+    "Lernen",
+    "Sport",
+    "Arbeit",
+    "Freizeit",
+    "Schlafen"
+]
+
+farben = {
+    "Leer": "#F2F2F2",
+    "Schule": "#BBD7FF",
+    "Lernen": "#D8C8FF",
+    "Sport": "#C8F7C5",
+    "Arbeit": "#FFB3B3",
+    "Freizeit": "#FFF3A3",
+    "Schlafen": "#D9D9D9"
+}
+
+
+# -------------------- Hilfsfunktionen --------------------
+def create_empty_plan():
+    """Erstellt einen leeren Wochenplan."""
+    return {
+        tag: {zeit: "Leer" for zeit in zeiten}
+        for tag in tage
+    }
+
+
+def plan_to_dataframe(plan):
+    """Wandelt den Wochenplan in eine Tabelle um."""
+    rows = []
+
+    for tag in tage:
+        for zeit in zeiten:
+            rows.append({
+                "Tag": tag,
+                "Zeit": zeit,
+                "Aktivität": plan[tag][zeit]
+            })
+
+    return pd.DataFrame(rows)
+
+
+def dataframe_to_plan(df):
+    """Wandelt gespeicherte Daten wieder in einen Wochenplan um."""
+    plan = create_empty_plan()
+
+    for _, row in df.iterrows():
+        tag = row["Tag"]
+        zeit = row["Zeit"]
+        aktivitaet = row["Aktivität"]
+
+        if tag in plan and zeit in plan[tag]:
+            plan[tag][zeit] = aktivitaet
+
+    return plan
+
+
+def save_wochenplan():
+    """Speichert den aktuellen Wochenplan."""
+    data_manager = DataManager()
+
+    plan_df = plan_to_dataframe(
+        st.session_state["wochenplan"]
+    )
+
+    data_manager.save_user_data(
+        plan_df,
+        "wochenplan.csv"
+    )
+
+
+# -------------------- Daten laden --------------------
+if "wochenplan" not in st.session_state:
+
+    data_manager = DataManager()
+
+    gespeicherter_plan = data_manager.load_user_data(
+        "wochenplan.csv",
+        pd.DataFrame()
+    )
+
+    if not gespeicherter_plan.empty:
+
+        st.session_state["wochenplan"] = dataframe_to_plan(
+            gespeicherter_plan
+        )
+
+    else:
+
+        st.session_state["wochenplan"] = create_empty_plan()
+
 
 # -------------------- Woche auswählen --------------------
 heute = date.today()
@@ -39,42 +135,6 @@ st.info(
     f"bis {wochen_ende.strftime('%d.%m.%Y')}"
 )
 
-# -------------------- Tage & Zeiten --------------------
-tage = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
-
-zeiten = [
-    f"{i:02d}:00-{(i+1)%24:02d}:00"
-    for i in range(6, 24)
-]
-
-# -------------------- Aktivitäten --------------------
-optionen = [
-    "Leer",
-    "Schule",
-    "Lernen",
-    "Sport",
-    "Arbeit",
-    "Freizeit",
-    "Schlafen"
-]
-
-# -------------------- Farben --------------------
-farben = {
-    "Leer": "#F2F2F2",
-    "Schule": "#BBD7FF",
-    "Lernen": "#D8C8FF",
-    "Sport": "#C8F7C5",
-    "Arbeit": "#FFB3B3",
-    "Freizeit": "#FFF3A3",
-    "Schlafen": "#D9D9D9"
-}
-
-# -------------------- Session State --------------------
-if "wochenplan" not in st.session_state:
-    st.session_state["wochenplan"] = {
-        tag: {zeit: "Leer" for zeit in zeiten}
-        for tag in tage
-    }
 
 # -------------------- Eintrag auswählen --------------------
 st.subheader("Eintrag auswählen")
@@ -95,8 +155,15 @@ with col4:
     st.write("")
 
     if st.button("Eintragen"):
-        st.session_state["wochenplan"][tag_input][zeit_input] = aktivitaet_input
+
+        st.session_state["wochenplan"][tag_input][zeit_input] = (
+            aktivitaet_input
+        )
+
+        save_wochenplan()
+
         st.success("Eintrag gespeichert.")
+
 
 # -------------------- Legende --------------------
 st.subheader("Legende")
@@ -127,12 +194,12 @@ st.caption(
     "Leer = Erholung, Essen, Duschen, freie Zeit oder nichts geplant"
 )
 
+
 # -------------------- Tabelle --------------------
 st.divider()
-
 st.subheader("Wochenübersicht")
 
-header_cols = st.columns([1,1,1,1,1,1,1,1])
+header_cols = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
 
 with header_cols[0]:
     st.markdown("**Zeit**")
@@ -142,10 +209,10 @@ for i, tag in enumerate(tage):
     with header_cols[i + 1]:
         st.markdown(f"**{tag}**")
 
-# -------------------- Tabelleninhalt --------------------
+
 for zeit in zeiten:
 
-    row_cols = st.columns([1,1,1,1,1,1,1,1])
+    row_cols = st.columns([1, 1, 1, 1, 1, 1, 1, 1])
 
     with row_cols[0]:
         st.markdown(f"**{zeit}**")
@@ -153,7 +220,6 @@ for zeit in zeiten:
     for i, tag in enumerate(tage):
 
         wert = st.session_state["wochenplan"][tag][zeit]
-
         farbe = farben[wert]
 
         with row_cols[i + 1]:
@@ -176,6 +242,7 @@ for zeit in zeiten:
                 unsafe_allow_html=True
             )
 
+
 # -------------------- Buttons --------------------
 st.divider()
 
@@ -184,22 +251,24 @@ col_a, col_b = st.columns(2)
 with col_a:
 
     if st.button("Plan speichern"):
+
+        save_wochenplan()
+
         st.success("Wochenplan wurde gespeichert.")
 
 with col_b:
 
     if st.button("Clear"):
 
-        st.session_state["wochenplan"] = {
-            tag: {zeit: "Leer" for zeit in zeiten}
-            for tag in tage
-        }
+        st.session_state["wochenplan"] = create_empty_plan()
+
+        save_wochenplan()
 
         st.rerun()
 
+
 # -------------------- Grafik --------------------
 st.divider()
-
 st.subheader("Grafische Wochenübersicht")
 
 aktivitaeten = []

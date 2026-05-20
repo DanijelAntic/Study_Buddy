@@ -1,14 +1,66 @@
 import streamlit as st
+from utils.data_manager import DataManager
 
-st.set_page_config(page_title="Meine App", page_icon=":material/home:")
+st.set_page_config(
+    page_title="StudyBuddy",
+    page_icon=":material/home:",
+    layout="wide"
+)
 
-pg_home = st.Page("views/home.py", title="Home", icon=":material/home:", default=True)
-pg_second = st.Page("views/übersicht.py", title="Übersicht", icon=":material/info:")
-pg_To_Do = st.Page("views/To_Do.py", title="To-Do") #icon=":white_check_mark:"
-pg_Wochenplaner = st.Page("views/Wochenplaner.py", title="Wochenplaner") #icon=":spiral_calendar_pad:"
-pg_Prüfungsplaner = st.Page("views/Prüfungsplaner.py", title="Prüfungsplaner") #icon=":spiral_calendar_pad:"
-pg_Noteneintrag = st.Page("views/Noteneintrag.py", title="Noteneintrag") #icon=":spiral_calendar_pad:"
-pg_Timer = st.Page("views/Timer.py", title="Timer") #icon=":spiral_calendar_pad:"
+# Gemeinsamer Benutzername für gespeicherte Daten
+if "username" not in st.session_state:
+    st.session_state["username"] = "studybuddy"
 
-pg = st.navigation([pg_home, pg_second, pg_To_Do, pg_Wochenplaner, pg_Prüfungsplaner, pg_Noteneintrag, pg_Timer])
+# Verbindung zu SWITCHdrive / WebDAV herstellen
+if "data_manager" not in st.session_state:
+    DataManager(fs_protocol="webdav")
+
+pg_home = st.Page(
+    "views/home.py",
+    title="Home",
+    icon=":material/home:",
+    default=True
+)
+
+pg_uebersicht = st.Page(
+    "views/uebersicht.py",
+    title="Übersicht",
+    icon=":material/info:"
+)
+
+pg_to_do = st.Page(
+    "views/to_do.py",
+    title="To-Do"
+)
+
+pg_wochenplaner = st.Page(
+    "views/wochenplaner.py",
+    title="Wochenplaner"
+)
+
+pg_pruefungsplaner = st.Page(
+    "views/pruefungsplaner.py",
+    title="Prüfungsplaner"
+)
+
+pg_noteneintrag = st.Page(
+    "views/noteneintrag.py",
+    title="Noteneintrag"
+)
+
+pg_timer = st.Page(
+    "views/timer.py",
+    title="Timer"
+)
+
+pg = st.navigation([
+    pg_home,
+    pg_uebersicht,
+    pg_to_do,
+    pg_wochenplaner,
+    pg_pruefungsplaner,
+    pg_noteneintrag,
+    pg_timer
+])
+
 pg.run()

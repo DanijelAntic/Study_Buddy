@@ -1,27 +1,42 @@
 import streamlit as st
 import pandas as pd
 
-# Times New Roman
-st.markdown(
-    """
-    <h1 style="
-        font-size:55px;
-        font-family:'Times New Roman';
-        color:#1D3557;
-    ">
-        Noteneintrag
-    </h1>
-    """,
-    unsafe_allow_html=True
+from utils.style import page_title
+from utils.data_manager import DataManager
+
+
+# -------------------- Titel --------------------
+page_title("Noteneintrag")
+
+st.write(
+    "Trage deine Noten ein und berechne deine "
+    "Durchschnittswerte schnell und übersichtlich."
 )
 
-st.write("Trage deine Noten ein und berechne deine Durchschnittswerte schnell und übersichtlich.")
 
-# -------------------- Session State --------------------
+# -------------------- Daten laden --------------------
 if "noten_df" not in st.session_state:
-    st.session_state["noten_df"] = pd.DataFrame(
-        columns=["Fach", "Noten", "Durchschnitt"]
+
+    data_manager = DataManager()
+
+    noten_df = data_manager.load_user_data(
+        "noten.csv",
+        pd.DataFrame()
     )
+
+    if not noten_df.empty:
+
+        st.session_state["noten_df"] = noten_df
+
+    else:
+
+        st.session_state["noten_df"] = pd.DataFrame(
+            columns=[
+                "Fach",
+                "Noten",
+                "Durchschnitt"
+            ]
+        )
 
 
 # -------------------- Formular --------------------
@@ -55,6 +70,7 @@ with st.form("noten_form", clear_on_submit=True):
 if speichern:
 
     if fach.strip() == "":
+
         st.warning("Bitte ein Fach eingeben.")
 
     else:
@@ -63,14 +79,20 @@ if speichern:
 
         fach_clean = fach.strip()
 
-        # Fach existiert bereits
+        # -------------------- Fach existiert bereits --------------------
         if fach_clean in df["Fach"].values:
 
-            index = df.index[df["Fach"] == fach_clean][0]
+            index = df.index[
+                df["Fach"] == fach_clean
+            ][0]
 
-            alte_noten = str(df.at[index, "Noten"])
+            alte_noten = str(
+                df.at[index, "Noten"]
+            )
 
-            neue_noten = f"{alte_noten}, {note}"
+            neue_noten = (
+                f"{alte_noten}, {note}"
+            )
 
             df.at[index, "Noten"] = neue_noten
 
@@ -85,9 +107,12 @@ if speichern:
                 2
             )
 
-            df.at[index, "Durchschnitt"] = durchschnitt
+            df.at[
+                index,
+                "Durchschnitt"
+            ] = durchschnitt
 
-        # Neues Fach
+        # -------------------- Neues Fach --------------------
         else:
 
             df.loc[len(df)] = {
@@ -96,17 +121,39 @@ if speichern:
                 "Durchschnitt": round(note, 2)
             }
 
+        # -------------------- Session State aktualisieren --------------------
         st.session_state["noten_df"] = df
 
+        # -------------------- CSV speichern --------------------
+        data_manager = DataManager()
+
+        data_manager.save_user_data(
+            st.session_state["noten_df"],
+            "noten.csv"
+        )
+
         st.success("Note gespeichert.")
+
 
 # -------------------- Clear --------------------
 if clear:
 
     st.session_state["noten_df"] = pd.DataFrame(
-        columns=["Fach", "Noten", "Durchschnitt"]
+        columns=[
+            "Fach",
+            "Noten",
+            "Durchschnitt"
+        ]
     )
-    
+
+    # -------------------- Leere CSV speichern --------------------
+    data_manager = DataManager()
+
+    data_manager.save_user_data(
+        st.session_state["noten_df"],
+        "noten.csv"
+    )
+
     st.rerun()
 
 
@@ -121,5 +168,6 @@ if not st.session_state["noten_df"].empty:
     )
 
 else:
+
     st.info("Noch keine Noten eingetragen.")
 

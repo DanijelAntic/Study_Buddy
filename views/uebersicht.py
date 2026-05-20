@@ -1,22 +1,12 @@
 import streamlit as st
+from utils.style import page_title
 
 
-# Times New Roman
-st.markdown(
-    """
-    <h1 style="
-        text-align:center;
-        font-size:55px;
-        font-family:'Times New Roman';
-        color:#1D3557;
-    ">
-        Übersicht
-    </h1>
-    """,
-    unsafe_allow_html=True
-)
+# -------------------- Titel --------------------
+page_title("Übersicht")
 
-# -------------------- Bubble 1 --------------------
+
+# -------------------- Bubble 1 | To-Do --------------------
 col1, col2 = st.columns([1, 12])
 
 with col1:
@@ -31,14 +21,15 @@ with col2:
             border-radius:30px 30px 30px 8px;
             margin-bottom:18px;
         ">
-            Die To-Do-Liste hilft dir dabei, wichtige Aufgaben und Deadlines nicht zu vergessen
-            und deine Ziele besser im Blick zu behalten.
+            Die To-Do-Liste hilft dir dabei, wichtige Aufgaben und Deadlines
+            nicht zu vergessen und deine Ziele besser im Blick zu behalten.
         </div>
         """,
         unsafe_allow_html=True
     )
 
-# -------------------- Bubble 2 --------------------
+
+# -------------------- Bubble 2 | Wochenplaner --------------------
 col1, col2 = st.columns([12, 1])
 
 with col1:
@@ -60,7 +51,8 @@ with col1:
 with col2:
     st.markdown("## 📅")
 
-# -------------------- Bubble 3 --------------------
+
+# -------------------- Bubble 3 | Prüfungsplaner --------------------
 col1, col2 = st.columns([1, 12])
 
 with col1:
@@ -75,14 +67,15 @@ with col2:
             border-radius:50px;
             margin-bottom:18px;
         ">
-            Der Prüfungsplaner unterstützt dich dabei, wichtige Termine im Blick zu behalten
-            und rechtzeitig mit dem Lernen zu starten.
+            Der Prüfungsplaner unterstützt dich dabei, wichtige Termine
+            im Blick zu behalten und rechtzeitig mit dem Lernen zu starten.
         </div>
         """,
         unsafe_allow_html=True
     )
 
-# -------------------- Bubble 4 --------------------
+
+# -------------------- Bubble 4 | Noteneintrag --------------------
 col1, col2 = st.columns([12, 1])
 
 with col1:
@@ -104,7 +97,8 @@ with col1:
 with col2:
     st.markdown("## 📊")
 
-# -------------------- Bubble 5 --------------------
+
+# -------------------- Bubble 5 | Fokus-Timer --------------------
 col1, col2 = st.columns([1, 12])
 
 with col1:
@@ -126,5 +120,3 @@ with col2:
         """,
         unsafe_allow_html=True
     )
-
-
