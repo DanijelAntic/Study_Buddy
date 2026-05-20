@@ -1,6 +1,6 @@
 ![Roadmap](../Images/Roadmap.jpg)
 
-# Roadmap Studynova
+# Roadmap StudyBuddy
 
 ## Version 1.0: Grundgerüst
 

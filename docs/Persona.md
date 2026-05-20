@@ -1,4 +1,4 @@
-# Persona – Studynova
+# Persona – StudyBuddy
 
 ## Name & Alter
 
