@@ -7,22 +7,58 @@ st.set_page_config(
     layout="wide"
 )
 
-# ZUERST username setzen
-if "username" not in st.session_state:
-    st.session_state["username"] = "studybuddy"
+# -------------------- Benutzername --------------------
+st.session_state["username"] = "studybuddy"
 
-# DANACH WebDAV verbinden
-if "data_manager" not in st.session_state:
-    DataManager(fs_protocol="webdav")
+# -------------------- DataManager mit SWITCHdrive --------------------
+if "data_manager" in st.session_state:
+    del st.session_state["data_manager"]
 
-pg_home = st.Page("views/home.py", title="Home", icon=":material/home:", default=True)
-pg_uebersicht = st.Page("views/uebersicht.py", title="Übersicht", icon=":material/info:")
-pg_to_do = st.Page("views/to_do.py", title="To-Do")
-pg_wochenplaner = st.Page("views/wochenplaner.py", title="Wochenplaner")
-pg_pruefungsplaner = st.Page("views/pruefungsplaner.py", title="Prüfungsplaner")
-pg_noteneintrag = st.Page("views/noteneintrag.py", title="Noteneintrag")
-pg_timer = st.Page("views/timer.py", title="Timer")
+DataManager(
+    fs_protocol="webdav",
+    fs_root_folder="app_data"
+)
 
+# -------------------- Seiten --------------------
+pg_home = st.Page(
+    "views/home.py",
+    title="Home",
+    icon=":material/home:",
+    default=True
+)
+
+pg_uebersicht = st.Page(
+    "views/uebersicht.py",
+    title="Übersicht",
+    icon=":material/info:"
+)
+
+pg_to_do = st.Page(
+    "views/to_do.py",
+    title="To-Do"
+)
+
+pg_wochenplaner = st.Page(
+    "views/wochenplaner.py",
+    title="Wochenplaner"
+)
+
+pg_pruefungsplaner = st.Page(
+    "views/pruefungsplaner.py",
+    title="Prüfungsplaner"
+)
+
+pg_noteneintrag = st.Page(
+    "views/noteneintrag.py",
+    title="Noteneintrag"
+)
+
+pg_timer = st.Page(
+    "views/timer.py",
+    title="Timer"
+)
+
+# -------------------- Navigation --------------------
 pg = st.navigation([
     pg_home,
     pg_uebersicht,
