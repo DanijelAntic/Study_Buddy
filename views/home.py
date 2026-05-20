@@ -14,7 +14,7 @@ st.markdown(
 
 
 # -------------------- Logo --------------------
-col1, col2, col3 = st.columns([1.2, 2, 0.8])
+col1, col2, col3 = st.columns([0.9, 1, 0.8])
 
 with col2:
     st.image(
