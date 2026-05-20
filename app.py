@@ -21,10 +21,17 @@ DataManager(
     fs_root_folder="StudyBuddy"
 )
 
-# -------------------- INFO TEST --------------------
-st.write(
-    st.session_state["data_manager"].info()
-)
+# -------------------- TEST BUTTON --------------------
+if st.button("SWITCHdrive Test speichern"):
+
+    st.session_state["data_manager"].save_app_data(
+        "Test funktioniert",
+        "test.txt"
+    )
+
+    st.success(
+        "Testdatei wurde gespeichert."
+    )
 
 # -------------------- Seiten --------------------
 pg_home = st.Page(
@@ -75,4 +82,7 @@ pg = st.navigation([
     pg_noteneintrag,
     pg_timer
 ])
+
+# -------------------- App starten --------------------
+pg.run()
 
