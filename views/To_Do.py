@@ -1,5 +1,6 @@
 import streamlit as st
 from datetime import date, datetime
+from utils.data_manager import DataManager
 
 
 # Times New Roman
