@@ -1,9 +1,25 @@
 import streamlit as st
+import pandas as pd
 from datetime import date, datetime
+
 from utils.data_manager import DataManager
 
 
-# Times New Roman
+# -------------------- Hilfsfunktion Speichern --------------------
+def save_todos():
+    data_manager = DataManager()
+
+    todos_df = pd.DataFrame(
+        st.session_state["todos"]
+    )
+
+    data_manager.save_user_data(
+        todos_df,
+        "todos.csv"
+    )
+
+
+# -------------------- Titel --------------------
 st.markdown(
     """
     <h1 style="
@@ -16,11 +32,27 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-st.write("Organisiere deine Aufgaben und behalte wichtige To-Dos und Deadlines im Überblick.")
 
-# -------------------- Session State --------------------
+st.write(
+    "Organisiere deine Aufgaben und behalte wichtige "
+    "To-Dos und Deadlines im Überblick."
+)
+
+
+# -------------------- Daten laden --------------------
 if "todos" not in st.session_state:
-    st.session_state["todos"] = []
+
+    data_manager = DataManager()
+
+    todos_df = data_manager.load_user_data(
+        "todos.csv",
+        pd.DataFrame()
+    )
+
+    if not todos_df.empty:
+        st.session_state["todos"] = todos_df.to_dict("records")
+    else:
+        st.session_state["todos"] = []
 
 
 # -------------------- Formular --------------------
@@ -36,11 +68,14 @@ with st.form("todo_form", clear_on_submit=True):
             st.warning("Bitte eine Aufgabe eingeben.")
         else:
             st.session_state["todos"].append({
-                "Aufgabe": aufgabe,
-                "Beschreibung": beschreibung,
+                "Aufgabe": aufgabe.strip(),
+                "Beschreibung": beschreibung.strip(),
                 "Deadline": deadline.strftime("%d.%m.%Y"),
                 "Erledigt": False
             })
+
+            save_todos()
+
             st.success("Aufgabe gespeichert.")
 
 
@@ -54,6 +89,8 @@ if st.session_state["todos"]:
     col3.write("**Deadline**")
     col4.write("**Erledigt**")
 
+    checkbox_geaendert = False
+
     for i, todo in enumerate(st.session_state["todos"]):
         c1, c2, c3, c4 = st.columns([2, 3, 2, 1])
 
@@ -63,11 +100,16 @@ if st.session_state["todos"]:
 
         erledigt = c4.checkbox(
             "",
-            value=todo["Erledigt"],
+            value=bool(todo["Erledigt"]),
             key=f"todo_done_{i}"
         )
 
-        st.session_state["todos"][i]["Erledigt"] = erledigt
+        if erledigt != todo["Erledigt"]:
+            st.session_state["todos"][i]["Erledigt"] = erledigt
+            checkbox_geaendert = True
+
+    if checkbox_geaendert:
+        save_todos()
 
 else:
     st.info("Noch keine Aufgaben vorhanden.")
@@ -76,6 +118,7 @@ else:
 # -------------------- Clear Button --------------------
 if st.button("Clear"):
     st.session_state["todos"] = []
+    save_todos()
     st.rerun()
 
 
@@ -86,7 +129,11 @@ if st.session_state["todos"]:
     heute = date.today()
 
     for todo in st.session_state["todos"]:
-        deadline_date = datetime.strptime(todo["Deadline"], "%d.%m.%Y").date()
+        deadline_date = datetime.strptime(
+            todo["Deadline"],
+            "%d.%m.%Y"
+        ).date()
+
         tage = (deadline_date - heute).days
 
         if todo["Erledigt"]:
